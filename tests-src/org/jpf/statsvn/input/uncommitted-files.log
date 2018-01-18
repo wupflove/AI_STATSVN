@@ -1,0 +1,16 @@
+
+RCS file: /cvsroot/statcvs/statcvs/LICENSE,v
+Working file: LICENSE
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;     selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2003/06/04 19:32:58;  author: cyganiak;  state: Exp;
+renamed license.txt to LICENSE
+=============================================================================

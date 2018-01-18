@@ -1,0 +1,4 @@
+svn log --xml -v > svn.log
+svn info --xml -R > svn.info
+svn propget svn:mime-type -R > svn.propget
+svn list -R | sed -e 's/.$//g' -e 's@.*/$@@g' -e '/^$/d' | xargs wc -l | sed -e 's/^ \+//g' -e 's/^[0-9]\+ total$//g' -e 's/$/\r/' > linecounts.txt

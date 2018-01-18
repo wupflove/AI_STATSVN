@@ -1,0 +1,28 @@
+
+RCS file: /cvsroot/statcvs/statcvs/LICENSE,v
+Working file: LICENSE
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 0
+description:
+=============================================================================
+
+RCS file: /cvsroot/statcvs/statcvs/README,v
+Working file: README
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2003/06/04 19:32:59;  author: cyganiak;  state: Exp;
+comment
+=============================================================================

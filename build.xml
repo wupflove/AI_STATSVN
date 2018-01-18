@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="statsvn" default="all" basedir=".">
+
+	<property file="project.properties" />
+	<property name="project" value="statsvn" />
+	<property name="project.path" value="net/sf/statsvn" />
+	<property name="project.package" value="net.sf.statsvn" />
+	<property name="project.jar" value="statsvn.jar" />
+	<property name="src" value="src" />
+	<property name="src.tests" value="tests-src" />
+	<property name="src.filtered" value="src-temp" />
+	<property name="build" value="build" />
+	<property name="build.tests" value="build-tests" />
+	<property name="statcvs.jar" value="statcvs-${statcvs.version}.jar" />
+	<property name="concurrent.jar" value="backport-util-concurrent-3.0.jar" />
+	<property name="dist" value="dist" />
+	<property name="lib" value="lib" />
+	<property name="doc" value="doc" />
+	<property name="stats" value="stats" />
+	<property name="cvs.log" value="cvs.log" />
+	<property name="svn.log" value="svn.log" />
+	<property environment="env" />
+
+	<path id="project.class.path">
+		<pathelement path="${java.class.path}" />
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<!-- Delete all directory trees created by the build file -->
+		<delete dir="${src.filtered}" failonerror="false" />
+		<delete dir="${build}" failonerror="false" />
+		<delete dir="${build.tests}" failonerror="false" />
+		<delete dir="${project}" failonerror="false" />
+		<delete dir="${dist}" failonerror="false" />
+		<delete dir="${doc}" failonerror="false" />
+		<delete dir="${stats}" failonerror="false" />
+		<delete file="${cvs.log}" failonerror="false" />
+	</target>
+
+	<target name="init">
+		<echo message="ant run time=${ant.version}" />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}" />
+	</target>
+
+	<target name="filter">
+		<delete dir="${src.filtered}" failonerror="false" />
+		<copy todir="${src.filtered}">
+			<fileset dir="${src}" includes="**/*.jar" />
+		</copy>
+		<copy todir="${src.filtered}">
+			<fileset dir="${src}" excludes="**/*.png, **/*.jar" />
+			<filterset>
+				<filter token="VERSION" value="${statsvn.version}" />
+			</filterset>
+		</copy>
+		<copy todir="${src.filtered}">
+			<fileset dir="${src}" includes="**/*.png" />
+		</copy>
+	</target>
+
+	<target name="compile" depends="init,filter">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src.filtered}" destdir="${build}" debug="on" source="1.8" target="1.8" >
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+
+	<target name="copyfiles" depends="init">
+		<!-- Copies non-class files from source directory to
+			build directory -->
+		<copy todir="${build}/${project.path}/">
+			<fileset dir="${src.filtered}/${project.path}/">
+				<include name="**/*.properties" />
+				<include name="**/web-files/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="run" depends="compile,copyfiles">
+		<!-- Runs StatSVN on itself -->
+		<java classname="${project.package}.Main" fork="yes">
+			<arg line="-verbose -title StatSVN -output-dir ${stats} -notes etc/report-notes.txt ${svn.log} ." />
+			<classpath>
+				<path refid="project.class.path" />
+				<pathelement path="${build}" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="init.tests">
+		<!-- Create the build directory structure used by compile.tests -->
+		<mkdir dir="${build.tests}" />
+	</target>
+
+	<target name="compile.tests" depends="init.tests,compile">
+		<!-- Compile the unit tests from ${src.tests} into ${build.tests} -->
+		<javac srcdir="${src.tests}" destdir="${build.tests}" debug="on" source="1.6" target="1.6">
+			<classpath>
+				<path refid="project.class.path" />
+				<pathelement path="${build}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="copyfiles.tests" depends="init">
+		<!-- Copies non-class files from source directory to
+			build directory -->
+		<copy todir="${build.tests}/${project.path}/">
+			<fileset dir="${src.tests}/${project.path}/">
+				<include name="**/*.log" />
+				<include name="**/*.log2" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="test" depends="compile.tests,copyfiles,copyfiles.tests">
+		<!-- Runs JUnit tests using the text-only TestRunner -->
+		<java classname="junit.textui.TestRunner" fork="yes" failonerror="true">
+			<arg value="${project.package}.AllTests" />
+			<classpath>
+				<path refid="project.class.path" />
+				<pathelement path="${build}" />
+				<pathelement path="${build.tests}" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="dist"  depends="compile,copyfiles">
+		<!-- Creates an executable jar file for the project -->
+		<unjar src="${lib}/${statcvs.jar}" dest="${build}" />
+		<!-- Expand and use the concurrent JAR -->
+		<unjar src="${lib}/${concurrent.jar}" dest="${build}" />
+
+		<!-- Now included in statcvs.jar -->
+		<!--<unjar src="${lib}/${jfreechart.jar}" dest="${build}" />
+		<unjar src="${lib}/${jcommon.jar}" dest="${build}" />-->
+		
+		<mkdir dir="${dist}" />
+		<jar jarfile="${dist}/${project.jar}" basedir="${build}">
+			<manifest>
+				<attribute name="Main-Class" value="${project.package}.Main" />
+				<attribute name="Class-Path" value="svnkit.jar jna.jar" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="release" depends="clean,dist,javadoc,zip.source,dist,test,zip">
+	</target>
+
+	<target name="zip" depends="dist">
+		<zip destfile="${dist}/${project}-${statsvn.version}.zip">
+			<zipfileset file="${dist}/${project.jar}" fullpath="${project}-${statsvn.version}/${project.jar}" />
+			<zipfileset file="etc/README" fullpath="${project}-${statsvn.version}/readme.txt" />
+		</zip>
+	</target>
+
+	<target name="zip.source" depends="clean">
+		<mkdir dir="${dist}" />
+		<zip destfile="${dist}/${project}-${statsvn.version}-source.zip">
+			<zipfileset dir="." excludes="${dist}/**,target/**" prefix="${project}-${statsvn.version}" />
+		</zip>
+	</target>
+     
+	<target name="javadoc" depends="filter">
+		<!-- Creates javadoc documentation for the source
+			(but not for the tests) -->
+		<delete dir="${doc}" />
+		<mkdir dir="${doc}" />
+		<javadoc packagenames="net.*" sourcepath="${src.filtered}" destdir="${doc}" classpathref="project.class.path" author="true" version="true" private="false" use="true" splitindex="true" windowtitle="${project}" doctitle="${project}">
+			<link href="http://www.jfree.org/jfreechart/api/gjdoc/" />
+			<!--
+			<link href="http://java.sun.com/j2se/1.4.2/docs/api/" />
+			-->
+		</javadoc>
+	</target>
+    
+	<target name="cvs.update">
+		<!-- Updates from repository. Only works in a checked-out
+			repository with a working local CVS client
+			installation -->
+		<cvs command="update -d" />
+		<!-- Don't specify -P because we want to retain empty dirs
+			for the log -->
+	</target>
+
+	<target name="cvs.log">
+		<!-- Saves a cvs log to disk. Only works in a checked-out
+			repository with a working local CVS client
+			installation -->
+		<cvs command="log" output="${cvs.log}" />
+	</target>
+
+	<target name="svn.update">
+		<!-- Updates from repository. Only works in a checked-out
+					repository with a working local SVN client
+					installation -->
+		<exec dir="./" executable="svn" resolveexecutable="true">
+			<arg line="update" />
+		</exec>
+	</target>
+
+	<target name="svn.log">
+		<!-- Saves a SVN log to disk. Only works in a checked-out
+			repository with a working local SVN client
+			installation -->
+		<exec dir="./" executable="svn" resolveexecutable="true" output="${svn.log}">
+			<arg line="log -v --xml" />
+		</exec>
+	</target>
+	<target name="all" depends="zip,javadoc,run" />
+</project>

@@ -1,0 +1,44 @@
+<project xmlns:j="jelly:core" xmlns:u="jelly:util" xmlns:ant="jelly:ant"
+	xmlns:maven="jelly:maven">
+
+	<preGoal name="java:compile">
+		<ant:filter token="VERSION" value="${pom.currentVersion}" />
+		<ant:filter token="JAR" value="${maven.final.name}-full.jar" />
+		<copy toDir="target/src" filtering="true" overwrite="true">
+			<fileset dir="${pom.build.sourceDirectory}">
+				<includes name="**/*" />
+			</fileset>
+		</copy>
+		<path id="maven.compile.src.set" location="target/src" />
+	</preGoal>
+
+	<postGoal name="uberjar">
+		<ant:move file="${maven.build.dir}/${maven.final.name}-uber.jar"
+			toFile="${maven.build.dir}/${maven.final.name}-full.jar"
+			overwrite="true" />
+	</postGoal>
+
+	<postGoal name="dist:build">
+		<attainGoal name="uberjar" />
+		<j:set var="distdir"
+			value="${pom.getPluginContext('maven-dist-plugin').getVariable('maven.dist.dir')}" />
+		<!-- Copy UberJars -->
+		<ant:copy todir="${distdir}">
+			<ant:fileset dir="${maven.build.dir}">
+				<ant:include name="${maven.final.name}-full.jar" />
+			</ant:fileset>
+		</ant:copy>
+	</postGoal>
+
+	<goal name="dist:snapshot"
+		description="Create a snapshot distribution">
+
+		<maven:snapshot project="${pom}" />
+
+		<j:set var="maven.final.name" value="${snapshotSignature}" />
+		<ant:echo>Building snapshot JAR: ${maven.final.name}</ant:echo>
+
+		<attainGoal name="dist" />
+	</goal>
+
+</project>

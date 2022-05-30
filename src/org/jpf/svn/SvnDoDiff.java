@@ -1,5 +1,5 @@
 /**
- * @author 吴平福 E-mail:wupf@asiainfo.com
+ * @author 吴平福 E-mail:421722623@qq.com
  * @version 创建时间：2017年5月10日 下午4:29:13 类说明
  */
 
@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-
 import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,14 +18,13 @@ import org.apache.logging.log4j.Logger;
 import org.tmatesoft.svn.core.SVNDepth;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.internal.wc.DefaultSVNOptions;
-
 import org.tmatesoft.svn.core.wc.ISVNOptions;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNDiffClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
-import com.asiainfo.utils.ios.AiOsUtil;
+
 
 
 /* 此类用来比较某个文件两个版本的差异 */
@@ -35,7 +33,7 @@ public class SvnDoDiff {
     private static SVNClientManager ourClientManager;
     private static final Logger logger = LogManager.getLogger();
 
-    String SvnUrl="http://130.51.23.250/bss_gd/crm/tags/tst_20170601/j2ee/BSSWEB";
+    String SvnUrl="http://130.51.23.250/";
     String SvnUsr="public";
     String SvnPwd="123456";
     public static void main(String[] args) throws Exception {
@@ -62,7 +60,7 @@ public class SvnDoDiff {
             String strEndStartDateTime, Vector<SvnChangeInfo> vChangeInfos, String UserName,
             String PassWord) 
     {
-        if (AiOsUtil.getInstance().isWindows())
+        if (AiOsUtil.isWindows())
         {
             getSvnDiff_Win(strURL, strStartDateTime, strEndStartDateTime, vChangeInfos);
         }else {

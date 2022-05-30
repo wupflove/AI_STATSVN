@@ -1,5 +1,5 @@
 /**
- * @author 吴平福 E-mail:wupf@asiainfo.com
+ * @author 吴平福 E-mail:421722623@qq.com
  * @version 创建时间：2017年7月20日 下午10:08:22 类说明
  */
 
@@ -21,8 +21,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
-import com.asiainfo.utils.AiDateTimeUtil;
-import com.asiainfo.utils.scms.SVNUtil;
+
 
 public class SvnCheckOutUtil {
     // 声明SVN客户端管理类
@@ -35,9 +34,7 @@ public class SvnCheckOutUtil {
     }
     public static void main(String... args) {
         try {
-            CheckOut(
-                    "http://10.3.3.233/svn/products/openboss/newcrm_jx_modules/newcrm_jx_exe/src/main/java/com/asiainfo/crm/exe/tf/rboss/localdev/newskyrecharge",
-                    "liaocj", "liaocj", "d:/test", "2017-05-01 00;00:00");
+
         } catch (Exception ex) {
             // TODO: handle exception
             ex.printStackTrace();

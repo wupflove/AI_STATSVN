@@ -1,6 +1,6 @@
 /** 
  * @author ��ƽ�� 
- * E-mail:wupf@asiainfo-linkage.com 
+ * E-mail:421722623@qq.com 
  * @version ����ʱ�䣺2013-8-14 ����5:03:26 
  * ��˵�� 
  */
@@ -15,14 +15,9 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.asiainfo.utils.AiDateTimeUtil;
-import com.asiainfo.utils.dbsql.AiDBUtil;
 
 /**
  * 

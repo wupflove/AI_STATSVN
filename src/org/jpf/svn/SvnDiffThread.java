@@ -1,6 +1,6 @@
 /** 
 * @author 吴平福 
-* E-mail:wupf@asiainfo.com 
+* E-mail:421722623@qq.com 
 * @version 创建时间：2018年1月12日 上午11:24:41 
 * 类说明 
 */ 
@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.asiainfo.utils.ios.AiFileUtil;
 
 /**
  * 

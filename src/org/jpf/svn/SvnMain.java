@@ -1,6 +1,6 @@
 /** 
 * @author 吴平福 
-* E-mail:wupf@asiainfo.com 
+* E-mail:421722623@qq.com 
 * @version 创建时间：2018年1月11日 下午12:14:11 
 * 类说明 
 */ 
@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.asiainfo.utils.xmls.AiXmlUtil;
+
 
 /**
  * 
@@ -20,7 +20,7 @@ import com.asiainfo.utils.xmls.AiXmlUtil;
 public class SvnMain {
     private static final Logger logger = LogManager.getLogger();
     
-    String SvnUrl="http://10.1.195.110:8080/svn/CB20_RES_CENTER/trunk";
+    String SvnUrl="http://10.1.195.110:8080/";
     String SvnUsr="wupf";
     String SvnPwd="edc!@#456";
     /**
